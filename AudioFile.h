@@ -96,7 +96,7 @@ public:
     uint32_t getSampleRate() const;
     
     /** @Returns the number of audio channels in the buffer */
-    int getNumChannels() const;
+    std::size_t getNumChannels() const;
 
     /** @Returns true if the audio file is mono */
     bool isMono() const;
@@ -105,10 +105,10 @@ public:
     bool isStereo() const;
     
     /** @Returns the bit depth of each sample */
-    int getBitDepth() const;
+    std::size_t getBitDepth() const;
     
     /** @Returns the number of samples per channel */
-    int getNumSamplesPerChannel() const;
+    std::size_t getNumSamplesPerChannel() const;
     
     /** @Returns the length in seconds of the audio file based on the number of samples and sample rate */
     double getLengthInSeconds() const;
@@ -126,18 +126,18 @@ public:
     /** Sets the audio buffer to a given number of channels and number of samples per channel. This will try to preserve
      * the existing audio, adding zeros to any new channels or new samples in a given channel.
      */
-    void setAudioBufferSize (int numChannels, int numSamples);
+    void setAudioBufferSize (std::size_t numChannels, std::size_t numSamples);
     
     /** Sets the number of samples per channel in the audio buffer. This will try to preserve
      * the existing audio, adding zeros to new samples in a given channel if the number of samples is increased.
      */
-    void setNumSamplesPerChannel (int numSamples);
+    void setNumSamplesPerChannel (std::size_t numSamples);
     
     /** Sets the number of channels. New channels will have the correct number of samples and be initialised to zero */
-    void setNumChannels (int numChannels);
+    void setNumChannels (std::size_t numChannels);
     
     /** Sets the bit depth for the audio file. If you use the save() function, this bit depth rate will be used */
-    void setBitDepth (int numBitsPerSample);
+    void setBitDepth (std::size_t numBitsPerSample);
     
     /** Sets the sample rate for the audio file. If you use the save() function, this sample rate will be used */
     void setSampleRate (uint32_t newSampleRate);
@@ -307,9 +307,9 @@ uint32_t AudioFile<T>::getSampleRate() const
 
 //=============================================================
 template <class T>
-int AudioFile<T>::getNumChannels() const
+std::size_t AudioFile<T>::getNumChannels() const
 {
-    return (int)samples.size();
+    return samples.size();
 }
 
 //=============================================================
@@ -328,17 +328,17 @@ bool AudioFile<T>::isStereo() const
 
 //=============================================================
 template <class T>
-int AudioFile<T>::getBitDepth() const
+std::size_t AudioFile<T>::getBitDepth() const
 {
     return _bitDepth;
 }
 
 //=============================================================
 template <class T>
-int AudioFile<T>::getNumSamplesPerChannel() const
+std::size_t AudioFile<T>::getNumSamplesPerChannel() const
 {
     if (samples.size() > 0)
-        return (int) samples[0].size();
+        return samples[0].size();
     else
         return 0;
 }
@@ -397,7 +397,7 @@ bool AudioFile<T>::setAudioBuffer (AudioBuffer const& newBuffer)
 
 //=============================================================
 template <class T>
-void AudioFile<T>::setAudioBufferSize (int numChannels, int numSamples)
+void AudioFile<T>::setAudioBufferSize (std::size_t numChannels, std::size_t numSamples)
 {
     samples.resize (numChannels);
     setNumSamplesPerChannel (numSamples);
@@ -405,11 +405,11 @@ void AudioFile<T>::setAudioBufferSize (int numChannels, int numSamples)
 
 //=============================================================
 template <class T>
-void AudioFile<T>::setNumSamplesPerChannel (int numSamples)
+void AudioFile<T>::setNumSamplesPerChannel (std::size_t numSamples)
 {
-    int originalSize = getNumSamplesPerChannel();
+    std::size_t originalSize = getNumSamplesPerChannel();
     
-    for (int i = 0; i < getNumChannels();i++)
+    for (std::size_t i = 0; i < getNumChannels();i++)
     {
         samples[i].resize (numSamples);
         
@@ -421,10 +421,10 @@ void AudioFile<T>::setNumSamplesPerChannel (int numSamples)
 
 //=============================================================
 template <class T>
-void AudioFile<T>::setNumChannels (int numChannels)
+void AudioFile<T>::setNumChannels (std::size_t numChannels)
 {
-    int originalNumChannels = getNumChannels();
-    int originalNumSamplesPerChannel = getNumSamplesPerChannel();
+    std::size_t originalNumChannels = getNumChannels();
+    std::size_t originalNumSamplesPerChannel = getNumSamplesPerChannel();
     
     samples.resize (numChannels);
     
@@ -442,7 +442,7 @@ void AudioFile<T>::setNumChannels (int numChannels)
 
 //=============================================================
 template <class T>
-void AudioFile<T>::setBitDepth (int numBitsPerSample)
+void AudioFile<T>::setBitDepth (std::size_t numBitsPerSample)
 {
     _bitDepth = numBitsPerSample;
 }
