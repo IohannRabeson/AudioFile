@@ -76,7 +76,10 @@ public:
     
     /** Constructor, using a given file path to load a file */
     explicit AudioFile (std::string const& filePath);
-        
+    AudioFile(AudioFile&& other);
+    AudioFile(AudioFile const&) = delete;
+    AudioFile& operator = (AudioFile const&) = delete;
+
     //=============================================================
     /** Loads an audio file from a given file path.
      * @Returns true if the file was successfully loaded
@@ -282,6 +285,17 @@ AudioFile<T>::AudioFile (std::string const& filePath)
  :  AudioFile<T>()
 {
     load (filePath);
+}
+
+//=============================================================
+template <class T>
+AudioFile<T>::AudioFile(AudioFile&& other)
+: samples(std::move(other.samples))
+, iXMLChunk(std::move(other.iXMLChunk))
+, _audioFileFormat(std::move(other._audioFileFormat))
+, _sampleRate(std::move(other._sampleRate))
+, _bitDepth(std::move(other._bitDepth))
+{
 }
 
 //=============================================================
